@@ -1,7 +1,8 @@
 {
-  "name": "skeleton-ts",
+  "name": "byo-npm",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "The tiny package manager.",
+  "main": "src/index.js",
   "license": "MIT",
   "devDependencies": {
     "@types/bluebird": "^3.5.34",

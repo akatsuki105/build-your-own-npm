@@ -2,15 +2,13 @@ import { Promise } from 'bluebird';
 import findUp from 'find-up';
 import { readJson, writeJsonSync } from 'fs-extra';
 import { Arguments } from 'yargs';
-import { install } from 'install';
-import { list, PackageJson } from 'list';
-import { readLock } from 'lock';
-import { prepareInstall } from 'log';
-import { sortKeys } from 'utils';
+import { install } from './install';
+import { list, PackageJson } from './list';
+import { readLock } from './lock';
+import { prepareInstall } from './log';
+import { sortKeys } from './utils';
 
-console.log('Hello World!');
-
-const main = async (args: Arguments) => {
+export const main = async (args: Arguments) => {
   const jsonPath = await findUp('package.json');
   if (!jsonPath) throw new Error('Could not find package.json');
   const root = await readJson(jsonPath);

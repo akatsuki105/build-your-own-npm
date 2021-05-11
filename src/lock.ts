@@ -1,8 +1,8 @@
 import fs from 'fs-extra';
 import yaml from 'js-yaml';
-import { Manifest } from 'resolve';
-import { NAME } from 'constant';
-import { sortKeys } from 'utils';
+import { NAME } from './constant';
+import { Manifest } from './resolve';
+import { sortKeys } from './utils';
 
 /**
  * 依存関係を記録しておくためのLockツリー (e.g. yarn.lock)

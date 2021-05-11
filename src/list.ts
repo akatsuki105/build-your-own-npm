@@ -1,8 +1,8 @@
 import { Promise } from 'bluebird';
-import { resolve } from 'resolve';
 import { maxSatisfying, satisfies } from 'semver';
-import { getItem, updateOrCreate } from 'lock';
-import { logResolving } from 'log';
+import { getItem, updateOrCreate } from './lock';
+import { logResolving } from './log';
+import { resolve } from './resolve';
 
 export type DependenciesMap = {
   [dependency: string]: string;
