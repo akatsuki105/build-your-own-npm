@@ -42,7 +42,7 @@
     "yargs": "^17.0.1"
   },
   "scripts": {
-    "start": "node -r esbuild-register src/index.ts",
+    "start": "node -r esbuild-register src/cli.ts",
     "dev": "yarn start",
     "build": "tsc",
     "lint": "eslint src",
