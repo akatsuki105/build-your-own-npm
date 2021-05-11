@@ -1,6 +1,6 @@
 # build-your-own-npm
 
-A tiny Node.js package manager written in TypeScript.
+A tiny npm package manager written in TypeScript.
 
 ## Usage
 
