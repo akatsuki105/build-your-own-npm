@@ -1,6 +1,7 @@
 /build
 
 /node_modules
+/byo_node_modules
 *.lock
 .DS_Store
 

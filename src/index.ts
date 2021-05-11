@@ -2,6 +2,7 @@ import { Promise } from 'bluebird';
 import findUp from 'find-up';
 import { readJson, writeJsonSync } from 'fs-extra';
 import { Arguments } from 'yargs';
+import { TARGET } from './constant';
 import { install } from './install';
 import { list, PackageJson } from './list';
 import { readLock } from './lock';
@@ -48,7 +49,7 @@ export const main = async (args: Arguments) => {
 
   // コンフリクトがあるパッケージをインストール
   await Promise.each(info.unsatisfied, async (item) => {
-    await install(item.name, item.url, `/node_modules/${item.parent}`);
+    await install(item.name, item.url, `/${TARGET}/${item.parent}`);
   });
 
   beautifyPackageJson(root);

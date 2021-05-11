@@ -1,5 +1,6 @@
 import { Promise } from 'bluebird';
 import { maxSatisfying, satisfies } from 'semver';
+import { TARGET } from './constant';
 import { getItem, updateOrCreate } from './lock';
 import { logResolving } from './log';
 import { resolve } from './resolve';
@@ -53,7 +54,7 @@ const collectDeps = async (name: string, constraint: string, stack: DependencySt
 
     // 依存関係の循環があるとき
     // コンフリクトが発生している依存関係の前の2つの依存関係の情報が必要
-    const parent = stack.map((name) => name).slice(conflictIndex - 2).join('/node_modules'); // eslint-disable-line
+    const parent = stack.map((name) => name).slice(conflictIndex - 2).join(`/${TARGET}`); // eslint-disable-line
     unsatisfied.push({
       name,
       parent,
