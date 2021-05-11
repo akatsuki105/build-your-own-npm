@@ -14,6 +14,8 @@
     "@types/prettier": "^2.2.3",
     "@types/progress": "^2.0.3",
     "@types/semver": "^7.3.5",
+    "@types/tar": "^4.0.4",
+    "@types/yargs": "^16.0.1",
     "@typescript-eslint/eslint-plugin": "^4.22.1",
     "@typescript-eslint/parser": "^4.22.1",
     "esbuild-register": "^2.5.0",

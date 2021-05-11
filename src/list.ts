@@ -19,15 +19,21 @@ export type PackageJson = {
   devDependencies?: DependenciesMap;
 };
 
-// パッケージが重複しないようにパッケージツリーを平坦化したものを格納しておく
+/**
+ * パッケージが重複しないようにパッケージツリーを平坦化したものを格納しておく
+ */
 const topLevel: {
   [name: string]: { url: string; version: string };
 } = {};
 
-// 依存関係がコンフリクトしたときのための変数
+/**
+ * 依存関係がコンフリクトしたときのための変数
+ */
 const unsatisfied: { name: string; parent: string; url: string }[] = [];
 
-// 依存関係の収集
+/**
+ * 依存関係の収集
+ */
 const collectDeps = async (name: string, constraint: string, stack: DependencyStack = []) => {
   const fromLock = getItem(name, constraint);
   const manifest = fromLock || (await resolve(name));
@@ -94,7 +100,9 @@ const collectDeps = async (name: string, constraint: string, stack: DependencySt
   }
 };
 
-// トップレベルの依存関係ではなく、依存関係の依存関係にコンフリクトがあるかどうかをチェックする
+/**
+ * トップレベルの依存関係ではなく、依存関係の依存関係にコンフリクトがあるかどうかをチェックする
+ */
 const checkStackDependencies = (name: string, version: string, stack: DependencyStack): number => {
   return stack.findIndex(({ dependencies }) => {
     if (!dependencies[name]) return true;
@@ -103,14 +111,17 @@ const checkStackDependencies = (name: string, version: string, stack: Dependency
   });
 };
 
-// 依存関係が循環しているかどうか
-// パッケージがスタックに存在し、それがセマンティックバージョンを満たす場合、依存関係が循環している
+/**
+ * 依存関係が循環しているかどうか。
+ * パッケージがスタックに存在し、それがセマンティックバージョンを満たす場合、依存関係が循環している
+ */
 const hasCirculation = (name: string, range: string, stack: DependencyStack) => {
   return stack.some((item) => item.name === name && satisfies(item.version, range));
 };
 
-// 依存関係の情報を作成する
-// dep、devdepともに、パッケージ名とセマンティックバージョンが返ってきたら、`package.json`ファイルに追加する必要がある(新しいパッケージを追加するときに必要)
+/**
+ * 依存関係の情報を作成する。dep、devdepともに、パッケージ名とセマンティックバージョンが返ってきたら、`package.json`ファイルに追加する必要がある(新しいパッケージを追加するときに必要)
+ */
 export const list = async (rootManifest: PackageJson) => {
   if (rootManifest.dependencies) {
     const res = await Promise.map(

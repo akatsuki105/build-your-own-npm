@@ -105,6 +105,7 @@ module.exports = {
         "@typescript-eslint/no-unsafe-call": 0,
         "@typescript-eslint/no-unsafe-member-access": 0,
         "@typescript-eslint/no-unused-vars": 0,
+        "@typescript-eslint/explicit-module-boundary-types": 0,
     },
     settings: {
         'import/resolver': {

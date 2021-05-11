@@ -8,13 +8,19 @@ export type Manifest = {
   };
 };
 
-// この変数をいじればnpm以外をレジストリに設定できる
+/**
+ * この変数をいじればnpm以外をレジストリに設定できる
+ */
 const REGISTRY = process.env.REGISTRY || 'https://registry.npmjs.org/';
 
-// ここにパッケージをキャッシュしておく
+/**
+ * ここにパッケージをキャッシュしておく
+ */
 const cache: { [dep: string]: Manifest } = {};
 
-// name: npmパッケージ名(例: 'node-fetch')
+/**
+ * name: npmパッケージ名(例: `node-fetch`)
+ */
 export const resolve = async (name: string): Promise<Manifest> => {
   if (cache[name]) {
     return cache[name];
