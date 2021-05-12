@@ -12,7 +12,7 @@ import { sortKeys } from './utils';
 export const main = async (args: Arguments) => {
   const jsonPath = await findUp('package.json');
   if (!jsonPath) throw new Error('Could not find package.json');
-  const root = await readJson(jsonPath);
+  const root = (await readJson(jsonPath)) as PackageJson;
 
   // もし、`tiny-pm install <packageName>`を実行したなら`npm install` や `yarn add` のように動作させる
   const additionalPackages = args._.slice(1); // ['package0', 'package1', ...]
@@ -20,23 +20,23 @@ export const main = async (args: Arguments) => {
     if (args['save-dev'] || args.dev) {
       // devDependencies
       root.devDependencies ||= {};
-      // 現時点ではバージョンが特定されていないので、空欄にしおいて、情報を取得した後に書き込みを行う
-      additionalPackages.forEach((pkg) => (root.devDependencies[pkg] = ''));
+      // 現時点ではバージョンが特定されていないので、バージョンは空欄にしておいて、情報を取得した後に書き込みを行う
+      additionalPackages.forEach((pkg) => (root.devDependencies![pkg] = ''));
     } else {
       // dependencies
       root.dependencies ||= {};
-      // 現時点ではバージョンが特定されていないので、空欄にしおいて、情報を取得した後に書き込みを行う
-      additionalPackages.forEach((pkg) => (root.dependencies[pkg] = ''));
+      // 現時点ではバージョンが特定されていないので、バージョンは空欄にしておいて、情報を取得した後に書き込みを行う
+      additionalPackages.forEach((pkg) => (root.dependencies![pkg] = ''));
     }
   }
 
-  // productionモードでは devDependencies は必要ない
+  // productionモードでは devDependencies はインストールしない
   if (args.production) delete root.devDependencies;
 
   // lockfileがあれば依存関係を読み取る
   readLock();
 
-  // 依存関係を構築する
+  // 依存関係を加味してインストールするべきパッケージをリストアップする
   const info = await list(root);
 
   // 構築した依存関係を lockfile に書き込む

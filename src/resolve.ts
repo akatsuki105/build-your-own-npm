@@ -1,6 +1,8 @@
 import fetch from 'node-fetch';
+import { REGISTRY } from './constant';
 
-// パッケージ情報
+// パッケージのMeta情報
+// tarball: npmパッケージの本体が圧縮されたものが配置されているURL(e.g. https://registry.npmjs.org/node-fetch/-/node-fetch-0.1.0.tgz)
 export type Manifest = {
   [version: string]: {
     dependencies?: { [dep: string]: string };
@@ -9,17 +11,14 @@ export type Manifest = {
 };
 
 /**
- * この変数をいじればnpm以外をレジストリに設定できる
- */
-const REGISTRY = process.env.REGISTRY || 'https://registry.npmjs.org/';
-
-/**
- * ここにパッケージをキャッシュしておく
+ * ここにパッケージのMeta情報をキャッシュしておく
  */
 const cache: { [dep: string]: Manifest } = {};
 
 /**
- * name: npmパッケージ名(例: `node-fetch`)
+ * パッケージ名からManifest(パッケージのMeta情報)をとってくる
+ *
+ * @param {string} name - npmパッケージ名(例: `node-fetch`)
  */
 export const resolve = async (name: string): Promise<Manifest> => {
   if (cache[name]) {
