@@ -41,7 +41,7 @@ const topLevel: {
 } = {};
 
 /**
- * パッケージの中にはパッケージ本体の中にnode_modulesがあるものがある e.g. ./node_modules/eslint-plugin-import/node_modules
+ * パッケージの中にはコンフリクトのため、topLevelにはおけず、パッケージ本体の中にnode_modulesがあるものがある e.g. ./node_modules/eslint-plugin-import/node_modules
  * 依存関係がコンフリクトしたパッケージをその親(依存元)のパッケージとともに保存しておく
  */
 const unsatisfied: { name: string; parent: string; url: string }[] = [];
@@ -72,7 +72,7 @@ const collectDeps = async (name: string, constraint: string, stack: DependencySt
     case satisfies(topLevel[name].version, constraint): // topLevelに互換性のある同じパッケージが存在する
       const conflictIndex = checkStackDependencies(name, matched, stack);
       if (conflictIndex === -1) {
-        // TODO: わからないが依存関係の循環を避けるのに必要
+        // 祖先のどこにも配置できない
         return;
       }
 
@@ -108,7 +108,7 @@ const collectDeps = async (name: string, constraint: string, stack: DependencySt
     dependencies,
   });
 
-  // 依存関係ツリーを取得するのが目的なので、再起的に依存関係の依存関係も集める必要がある
+  // 依存関係ツリーを末端まで取得するのが目的なので、再起的に依存関係の依存関係も集める必要がある
   if (!!Object.keys(dependencies).length) {
     stack.push({
       name,
@@ -130,8 +130,9 @@ const collectDeps = async (name: string, constraint: string, stack: DependencySt
 };
 
 /**
- * topLevelの依存関係ではなく、依存関係の依存関係にコンフリクトがあるかどうかをチェックする
  * 祖先パッケージのうち、`name`で指定したパッケージとコンフリクトしないもの(nameを使ってない or nameを使っているがセマンティックバージョン的にOK)のインデックスを返す
+ *
+ * node.jsの挙動上、なるべく祖先に近いところのnode_modulesにパッケージを配置したいので、祖先を上から見ていってパッケージを配置できる階層を探索する
  *
  * @param {string} name - パッケージ名
  * @param {string} version - セマンティックバージョン
